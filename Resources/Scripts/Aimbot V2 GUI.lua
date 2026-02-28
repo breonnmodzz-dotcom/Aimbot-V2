@@ -116,11 +116,12 @@ Values:AddTextbox({ -- Using a Textbox instead of a Keybind because the UI Libra
 
 Values:AddTextbox({
     Name = "Menu Toggle", 
-    Value = "Insert",
+    Value = Settings.MenuKey or "ButtonGuide",
     Callback = function(New)
-        print("Menu Key:", New) -- Funciona depois
+        Settings.MenuKey = New  -- ← AGORA SALVA!
+        print("Menu Key:", New)
     end
-}).Default = "Insert"
+}).Default = Settings.MenuKey or "ButtonGuide"
 
 --[[
 Values:AddKeybind({
@@ -296,6 +297,15 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
+--// Menu Toggle System
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode.Name == Settings.MenuKey or input.UserInputType.Name == Settings.MenuKey then
+        Library:Close()
+        wait(0.1)
+        Library:Open()
+    end
+end)
+
 --// Functions / Functions
 FunctionsSection:AddButton({
 \tName = "Reset Settings",
@@ -306,6 +316,7 @@ FunctionsSection:AddButton({
 })
 
 --// Functions / Functions
+
 
 FunctionsSection:AddButton({
 	Name = "Reset Settings",
