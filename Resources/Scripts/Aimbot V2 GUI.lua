@@ -306,6 +306,42 @@ UserInputService.InputBegan:Connect(function(input)
     end
 end)
 
+--// Auto Open + Toggle Indicator
+wait(1)
+Library:Open()  -- Abre automático
+
+-- Cria X flutuante pra fechar
+local ScreenGui = game.CoreGui:FindFirstChild("AimbotToggle") or Instance.new("ScreenGui")
+ScreenGui.Name = "AimbotToggle"
+ScreenGui.Parent = game.CoreGui
+
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Name = "ToggleMenu"
+ToggleBtn.Parent = ScreenGui
+ToggleBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleBtn.Position = UDim2.new(0, 20, 0, 20)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+ToggleBtn.Text = "X"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextScaled = true
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.BorderSizePixel = 0
+ToggleBtn.Active = true
+ToggleBtn.Draggable = true
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    if Library.Opened then
+        Library:Close()
+        ToggleBtn.Text = "+"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    else
+        Library:Open()
+        ToggleBtn.Text = "X"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
+
+
 --// Functions / Functions
 FunctionsSection:AddButton({
 \tName = "Reset Settings",
