@@ -116,12 +116,12 @@ Values:AddTextbox({ -- Using a Textbox instead of a Keybind because the UI Libra
 
 Values:AddTextbox({
     Name = "Menu Toggle", 
-    Value = Settings.MenuKey or "ButtonGuide",
+    Value = Settings.MenuKey or "ButtonR1",
     Callback = function(New)
         Settings.MenuKey = New  -- ← AGORA SALVA!
         print("Menu Key:", New)
     end
-}).Default = Settings.MenuKey or "ButtonGuide"
+}).Default = Settings.MenuKey or "ButtonGuideR1"
 
 --[[
 Values:AddKeybind({
