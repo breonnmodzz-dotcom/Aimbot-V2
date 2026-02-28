@@ -81,20 +81,20 @@ local FunctionsSection = FunctionsTab:CreateSection({
 --// Settings / Values
 
 Values:AddToggle({
-	Name = "Enabled",
-	Value = Settings.Enabled,
-	Callback = function(New, Old)
-		Settings.Enabled = New
-	end
-}).Default = Settings.Enabled
+    Name = "Aim Fire Mode", 
+    Value = true,
+    Callback = function(New)
+        Settings.HoldMode = New
+    end
+}).Default = true
 
-Values:AddToggle({
-	Name = "Toggle",
-	Value = Settings.Toggle,
-	Callback = function(New, Old)
-		Settings.Toggle = New
-	end
-}).Default = Settings.Toggle
+Values:AddTextbox({
+    Name = "Fire Button", 
+    Value = "ButtonR2",
+    Callback = function(New)
+        Settings.FireKey = New
+    end
+}).Default = "ButtonR2"
 
 Settings.LockPart = Parts[1]; Values:AddDropdown({
 	Name = "Lock Part",
@@ -113,6 +113,14 @@ Values:AddTextbox({ -- Using a Textbox instead of a Keybind because the UI Libra
 		Settings.TriggerKey = New
 	end
 }).Default = Settings.TriggerKey
+
+Values:AddTextbox({
+    Name = "Menu Toggle", 
+    Value = "Insert",
+    Callback = function(New)
+        print("Menu Key:", New) -- Funciona depois
+    end
+}).Default = "Insert"
 
 --[[
 Values:AddKeybind({
@@ -267,6 +275,36 @@ FOV_Appearance:AddColorpicker({
 	end
 }).Default = FOVSettings.LockedColor
 
+[TODAS AS SUAS VALUES: Hotkey, Menu Toggle, etc...]
+
+--// Functions / Functions  ← ← ← AQUI EM CIMA!
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local holding = false
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode.Name == Settings.FireKey then
+        holding = true
+        Settings.Enabled = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.KeyCode.Name == Settings.FireKey then
+        holding = false
+        Settings.Enabled = false
+    end
+end)
+
+--// Functions / Functions
+FunctionsSection:AddButton({
+\tName = "Reset Settings",
+\tCallback = function()
+\t\tFunctions.ResetSettings()
+\t\tLibrary.ResetAll()
+\tend
+})
+
 --// Functions / Functions
 
 FunctionsSection:AddButton({
@@ -296,3 +334,4 @@ FunctionsSection:AddButton({
 		setclipboard("https://github.com/Exunys/Aimbot-V2")
 	end
 })
+	
