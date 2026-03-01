@@ -1,287 +1,225 @@
 --// Cache
-
 local loadstring, game, getgenv, setclipboard = loadstring, game, getgenv, setclipboard
 
 --// Loaded check
-
 if getgenv().Aimbot then return end
 
---// Load Aimbot V2 (Raw)
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-V2/main/Resources/Scripts/Raw%20Main.lua"))()
+--// Load Aimbot V2 (NOVO RAW)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/breonnmodzz-dotcom/Aimbot-V2/refs/heads/main/Resources/Scripts/Main.lua"))()
 
 --// Variables
-
 local Aimbot = getgenv().Aimbot
 local Settings, FOVSettings, Functions = Aimbot.Settings, Aimbot.FOVSettings, Aimbot.Functions
 
-local Library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)() -- Pepsi's UI Library
+local Library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)()
 
 local Parts = {"Head", "HumanoidRootPart", "Torso", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "LeftHand", "RightHand", "LeftLowerArm", "RightLowerArm", "LeftUpperArm", "RightUpperArm", "LeftFoot", "LeftLowerLeg", "UpperTorso", "LeftUpperLeg", "RightFoot", "RightLowerLeg", "LowerTorso", "RightUpperLeg"}
 
 --// Frame
-
 Library.UnloadCallback = Functions.Exit
 
 local MainFrame = Library:CreateWindow({
-	Name = "Aimbot V2",
-	Themeable = {
-		Image = "7059346386",
-		Info = "Made by Exunys\nPowered by Pepsi's UI Library",
-		Credit = false
-	},
-	Background = "",
-	Theme = [[{"__Designer.Colors.section":"ADC7FF","__Designer.Colors.topGradient":"1B242F","__Designer.Settings.ShowHideKey":"Enum.KeyCode.RightShift","__Designer.Colors.otherElementText":"54637D","__Designer.Colors.hoveredOptionBottom":"38667D","__Designer.Background.ImageAssetID":"","__Designer.Colors.unhoveredOptionTop":"407495","__Designer.Colors.innerBorder":"2C4168","__Designer.Colors.unselectedOption":"4E6EA0","__Designer.Background.UseBackgroundImage":true,"__Designer.Files.WorkspaceFile":"Aimbot V2","__Designer.Colors.main":"23A0FF","__Designer.Colors.outerBorder":"162943","__Designer.Background.ImageColor":"FFFFFF","__Designer.Colors.tabText":"C9DFF1","__Designer.Colors.elementBorder":"111D26","__Designer.Colors.sectionBackground":"0E141C","__Designer.Colors.selectedOption":"558AC2","__Designer.Colors.background":"11182A","__Designer.Colors.bottomGradient":"202B42","__Designer.Background.ImageTransparency":95,"__Designer.Colors.hoveredOptionTop":"4885A0","__Designer.Colors.elementText":"7692B8","__Designer.Colors.unhoveredOptionBottom":"5471C4"}]]
+\tName = "Aimbot V2 + ESP (BREONN)",
+\tThemeable = {
+\t\tImage = "7059346386",
+\t\tInfo = "Breonn Aimbot V2 + ESP
+Made by breonnmodzz",
+\t\tCredit = false
+\t},
+\tBackground = "",
+\tTheme = [[{"__Designer.Colors.section":"ADC7FF","__Designer.Colors.topGradient":"1B242F","__Designer.Settings.ShowHideKey":"Enum.KeyCode.RightShift","__Designer.Colors.otherElementText":"54637D","__Designer.Colors.hoveredOptionBottom":"38667D","__Designer.Background.ImageAssetID":"","__Designer.Colors.unhoveredOptionTop":"407495","__Designer.Colors.innerBorder":"2C4168","__Designer.Colors.unselectedOption":"4E6EA0","__Designer.Background.UseBackgroundImage":true,"__Designer.Files.WorkspaceFile":"Aimbot V2","__Designer.Colors.main":"23A0FF","__Designer.Colors.outerBorder":"162943","__Designer.Background.ImageColor":"FFFFFF","__Designer.Colors.tabText":"C9DFF1","__Designer.Colors.elementBorder":"111D26","__Designer.Colors.sectionBackground":"0E141C","__Designer.Colors.selectedOption":"558AC2","__Designer.Colors.background":"11182A","__Designer.Colors.bottomGradient":"202B42","__Designer.Background.ImageTransparency":95,"__Designer.Colors.hoveredOptionTop":"4885A0","__Designer.Colors.elementText":"7692B8","__Designer.Colors.unhoveredOptionBottom":"5471C4"}]]
 })
 
 --// Tabs
-
-local SettingsTab = MainFrame:CreateTab({
-	Name = "Settings"
-})
-
-local FOVSettingsTab = MainFrame:CreateTab({
-	Name = "FOV Settings"
-})
-
-local FunctionsTab = MainFrame:CreateTab({
-	Name = "Functions"
-})
+local SettingsTab = MainFrame:CreateTab({Name = "Settings"})
+local FOVSettingsTab = MainFrame:CreateTab({Name = "FOV Settings"})
+local ESPTab = MainFrame:CreateTab({Name = "ESP"}) -- NOVA ABA ESP
+local FunctionsTab = MainFrame:CreateTab({Name = "Functions"})
 
 --// Settings - Sections
-
-local Values = SettingsTab:CreateSection({
-	Name = "Values"
-})
-
-local Checks = SettingsTab:CreateSection({
-	Name = "Checks"
-})
-
-local ThirdPerson = SettingsTab:CreateSection({
-	Name = "Third Person"
-})
+local Values = SettingsTab:CreateSection({Name = "Values"})
+local Checks = SettingsTab:CreateSection({Name = "Checks"})
+local ThirdPerson = SettingsTab:CreateSection({Name = "Third Person"})
 
 --// FOV Settings - Sections
+local FOV_Values = FOVSettingsTab:CreateSection({Name = "Values"})
+local FOV_Appearance = FOVSettingsTab:CreateSection({Name = "Appearance"})
 
-local FOV_Values = FOVSettingsTab:CreateSection({
-	Name = "Values"
-})
-
-local FOV_Appearance = FOVSettingsTab:CreateSection({
-	Name = "Appearance"
-})
+--// ESP - Sections
+local ESPSection = ESPTab:CreateSection({Name = "ESP Options"})
 
 --// Functions - Sections
+local FunctionsSection = FunctionsTab:CreateSection({Name = "Functions"})
 
-local FunctionsSection = FunctionsTab:CreateSection({
-	Name = "Functions"
-})
+-- ESP VARIABLES
+local ESPEnabled = false
+local ESPObjects = {}
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 --// Settings / Values
-
 Values:AddToggle({
     Name = "Aim Fire Mode", 
     Value = true,
-    Callback = function(New)
-        Settings.HoldMode = New
-    end
+    Callback = function(New) Settings.HoldMode = New end
 }).Default = true
 
 Values:AddTextbox({
     Name = "Fire Button", 
     Value = "ButtonR2",
-    Callback = function(New)
-        Settings.FireKey = New
-    end
+    Callback = function(New) Settings.FireKey = New end
 }).Default = "ButtonR2"
 
-Settings.LockPart = Parts[1]; Values:AddDropdown({
-	Name = "Lock Part",
-	Value = Parts[1],
-	Callback = function(New, Old)
-		Settings.LockPart = New
-	end,
-	List = Parts,
-	Nothing = "Head"
+Settings.LockPart = Parts[1]
+Values:AddDropdown({
+\tName = "Lock Part",
+\tValue = Parts[1],
+\tCallback = function(New) Settings.LockPart = New end,
+\tList = Parts,
+\tNothing = "Head"
 }).Default = Parts[1]
 
-Values:AddTextbox({ -- Using a Textbox instead of a Keybind because the UI Library doesn't support Mouse inputs like Left Click / Right Click...
-	Name = "Hotkey",
-	Value = Settings.TriggerKey,
-	Callback = function(New, Old)
-		Settings.TriggerKey = New
-	end
+Values:AddTextbox({
+\tName = "Hotkey",
+\tValue = Settings.TriggerKey,
+\tCallback = function(New) Settings.TriggerKey = New end
 }).Default = Settings.TriggerKey
 
 Values:AddTextbox({
     Name = "Menu Toggle", 
     Value = Settings.MenuKey or "ButtonR1",
     Callback = function(New)
-        Settings.MenuKey = New  -- ← AGORA SALVA!
+        Settings.MenuKey = New
         print("Menu Key:", New)
     end
-}).Default = Settings.MenuKey or "ButtonGuideR1"
-
---[[
-Values:AddKeybind({
-	Name = "Hotkey",
-	Value = Settings.TriggerKey,
-	Callback = function(New, Old)
-		Settings.TriggerKey = stringmatch(tostring(New), "Enum%.[UserInputType]*[KeyCode]*%.(.+)")
-	end,
-}).Default = Settings.TriggerKey
-]]
+}).Default = Settings.MenuKey or "ButtonR1"
 
 Values:AddSlider({
-	Name = "Sensitivity",
-	Value = Settings.Sensitivity,
-	Callback = function(New, Old)
-		Settings.Sensitivity = New
-	end,
-	Min = 0,
-	Max = 1,
-	Decimals = 2
+\tName = "Sensitivity",
+\tValue = Settings.Sensitivity,
+\tCallback = function(New) Settings.Sensitivity = New end,
+\tMin = 0,
+\tMax = 1,
+\tDecimals = 2
 }).Default = Settings.Sensitivity
 
 --// Settings / Checks
-
 Checks:AddToggle({
-	Name = "Team Check",
-	Value = Settings.TeamCheck,
-	Callback = function(New, Old)
-		Settings.TeamCheck = New
-	end
+\tName = "Team Check",
+\tValue = Settings.TeamCheck,
+\tCallback = function(New) Settings.TeamCheck = New end
 }).Default = Settings.TeamCheck
 
 Checks:AddToggle({
-	Name = "Wall Check",
-	Value = Settings.WallCheck,
-	Callback = function(New, Old)
-		Settings.WallCheck = New
-	end
+\tName = "Wall Check",
+\tValue = Settings.WallCheck,
+\tCallback = function(New) Settings.WallCheck = New end
 }).Default = Settings.WallCheck
 
 Checks:AddToggle({
-	Name = "Alive Check",
-	Value = Settings.AliveCheck,
-	Callback = function(New, Old)
-		Settings.AliveCheck = New
-	end
+\tName = "Alive Check",
+\tValue = Settings.AliveCheck,
+\tCallback = function(New) Settings.AliveCheck = New end
 }).Default = Settings.AliveCheck
 
 --// Settings / ThirdPerson
-
 ThirdPerson:AddToggle({
-	Name = "Enable Third Person",
-	Value = Settings.ThirdPerson,
-	Callback = function(New, Old)
-		Settings.ThirdPerson = New
-	end
+\tName = "Enable Third Person",
+\tValue = Settings.ThirdPerson,
+\tCallback = function(New) Settings.ThirdPerson = New end
 }).Default = Settings.ThirdPerson
 
 ThirdPerson:AddSlider({
-	Name = "Sensitivity",
-	Value = Settings.ThirdPersonSensitivity,
-	Callback = function(New, Old)
-		Settings.ThirdPersonSensitivity = New
-	end,
-	Min = 0.1,
-	Max = 5,
-	Decimals = 1
+\tName = "Sensitivity",
+\tValue = Settings.ThirdPersonSensitivity,
+\tCallback = function(New) Settings.ThirdPersonSensitivity = New end,
+\tMin = 0.1,
+\tMax = 5,
+\tDecimals = 1
 }).Default = Settings.ThirdPersonSensitivity
 
 --// FOV Settings / Values
-
 FOV_Values:AddToggle({
-	Name = "Enabled",
-	Value = FOVSettings.Enabled,
-	Callback = function(New, Old)
-		FOVSettings.Enabled = New
-	end
+\tName = "Enabled",
+\tValue = FOVSettings.Enabled,
+\tCallback = function(New) FOVSettings.Enabled = New end
 }).Default = FOVSettings.Enabled
 
 FOV_Values:AddToggle({
-	Name = "Visible",
-	Value = FOVSettings.Visible,
-	Callback = function(New, Old)
-		FOVSettings.Visible = New
-	end
+\tName = "Visible",
+\tValue = FOVSettings.Visible,
+\tCallback = function(New) FOVSettings.Visible = New end
 }).Default = FOVSettings.Visible
 
 FOV_Values:AddSlider({
-	Name = "Amount",
-	Value = FOVSettings.Amount,
-	Callback = function(New, Old)
-		FOVSettings.Amount = New
-	end,
-	Min = 10,
-	Max = 300
+\tName = "Amount",
+\tValue = FOVSettings.Amount,
+\tCallback = function(New) FOVSettings.Amount = New end,
+\tMin = 10,
+\tMax = 300
 }).Default = FOVSettings.Amount
 
 --// FOV Settings / Appearance
-
 FOV_Appearance:AddToggle({
-	Name = "Filled",
-	Value = FOVSettings.Filled,
-	Callback = function(New, Old)
-		FOVSettings.Filled = New
-	end
+\tName = "Filled",
+\tValue = FOVSettings.Filled,
+\tCallback = function(New) FOVSettings.Filled = New end
 }).Default = FOVSettings.Filled
 
 FOV_Appearance:AddSlider({
-	Name = "Transparency",
-	Value = FOVSettings.Transparency,
-	Callback = function(New, Old)
-		FOVSettings.Transparency = New
-	end,
-	Min = 0,
-	Max = 1,
-	Decimal = 1
+\tName = "Transparency",
+\tValue = FOVSettings.Transparency,
+\tCallback = function(New) FOVSettings.Transparency = New end,
+\tMin = 0,
+\tMax = 1,
+\tDecimal = 1
 }).Default = FOVSettings.Transparency
 
 FOV_Appearance:AddSlider({
-	Name = "Sides",
-	Value = FOVSettings.Sides,
-	Callback = function(New, Old)
-		FOVSettings.Sides = New
-	end,
-	Min = 3,
-	Max = 60
+\tName = "Sides",
+\tValue = FOVSettings.Sides,
+\tCallback = function(New) FOVSettings.Sides = New end,
+\tMin = 3,
+\tMax = 60
 }).Default = FOVSettings.Sides
 
 FOV_Appearance:AddSlider({
-	Name = "Thickness",
-	Value = FOVSettings.Thickness,
-	Callback = function(New, Old)
-		FOVSettings.Thickness = New
-	end,
-	Min = 1,
-	Max = 50
+\tName = "Thickness",
+\tValue = FOVSettings.Thickness,
+\tCallback = function(New) FOVSettings.Thickness = New end,
+\tMin = 1,
+\tMax = 50
 }).Default = FOVSettings.Thickness
 
 FOV_Appearance:AddColorpicker({
-	Name = "Color",
-	Value = FOVSettings.Color,
-	Callback = function(New, Old)
-		FOVSettings.Color = New
-	end
+\tName = "Color",
+\tValue = FOVSettings.Color,
+\tCallback = function(New) FOVSettings.Color = New end
 }).Default = FOVSettings.Color
 
 FOV_Appearance:AddColorpicker({
-	Name = "Locked Color",
-	Value = FOVSettings.LockedColor,
-	Callback = function(New, Old)
-		FOVSettings.LockedColor = New
-	end
+\tName = "Locked Color",
+\tValue = FOVSettings.LockedColor,
+\tCallback = function(New) FOVSettings.LockedColor = New end
 }).Default = FOVSettings.LockedColor
 
-[TODAS AS SUAS VALUES: Hotkey, Menu Toggle, etc...]
+--// ESP TOGGLES
+ESPSection:AddToggle({
+    Name = "ESP Box",
+    Value = false,
+    Callback = function(Value)
+        ESPEnabled = Value
+        if not Value then
+            for _, obj in pairs(ESPObjects) do
+                if obj then obj:Destroy() end
+            end
+            ESPObjects = {}
+        end
+    end
+})
 
---// Functions / Functions  ← ← ← AQUI EM CIMA!
-local RunService = game:GetService("RunService")
+--// Functions / Fire Mode
 local UserInputService = game:GetService("UserInputService")
-
 local holding = false
 UserInputService.InputBegan:Connect(function(input)
     if input.KeyCode.Name == Settings.FireKey then
@@ -306,26 +244,63 @@ UserInputService.InputBegan:Connect(function(input)
     end
 end)
 
+--// ESP LOOP
+RunService.Heartbeat:Connect(function()
+    if ESPEnabled then
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                local root = plr.Character.HumanoidRootPart
+                local existing = ESPObjects[plr]
+                
+                if not existing or not existing.Parent then
+                    if existing then existing:Destroy() end
+                    
+                    local box = Instance.new("BoxHandleAdornment")
+                    box.Name = "ESPBox"
+                    box.Size = Vector3.new(4.5, 6, 1.5)
+                    box.Color3 = Color3.new(0, 1, 0)
+                    box.Transparency = 0.5
+                    box.Adornee = plr.Character
+                    box.AlwaysOnTop = true
+                    box.ZIndex = 10
+                    box.Parent = root
+                    ESPObjects[plr] = box
+                end
+            elseif ESPObjects[plr] then
+                ESPObjects[plr]:Destroy()
+                ESPObjects[plr] = nil
+            end
+        end
+    else
+        for plr, obj in pairs(ESPObjects) do
+            if obj then obj:Destroy() end
+        end
+        ESPObjects = {}
+    end
+end)
+
 --// Auto Open + Toggle Indicator
 wait(1)
-Library:Open()  -- Abre automático
+Library:Open()
 
--- Cria X flutuante pra fechar
+-- BOTÃO MINIMIZAR FLUTUANTE
 local ScreenGui = game.CoreGui:FindFirstChild("AimbotToggle") or Instance.new("ScreenGui")
 ScreenGui.Name = "AimbotToggle"
 ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
 
 local ToggleBtn = Instance.new("TextButton")
 ToggleBtn.Name = "ToggleMenu"
 ToggleBtn.Parent = ScreenGui
-ToggleBtn.Size = UDim2.new(0, 40, 0, 40)
+ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
 ToggleBtn.Position = UDim2.new(0, 20, 0, 20)
 ToggleBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 ToggleBtn.Text = "X"
 ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleBtn.TextScaled = true
 ToggleBtn.Font = Enum.Font.GothamBold
-ToggleBtn.BorderSizePixel = 0
+ToggleBtn.BorderSizePixel = 2
+ToggleBtn.BorderColor3 = Color3.fromRGB(255, 255, 255)
 ToggleBtn.Active = true
 ToggleBtn.Draggable = true
 
@@ -341,8 +316,7 @@ ToggleBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-
---// Functions / Functions
+--// Functions
 FunctionsSection:AddButton({
 \tName = "Reset Settings",
 \tCallback = function()
@@ -351,34 +325,25 @@ FunctionsSection:AddButton({
 \tend
 })
 
---// Functions / Functions
-
-
 FunctionsSection:AddButton({
-	Name = "Reset Settings",
-	Callback = function()
-		Functions.ResetSettings()
-		Library.ResetAll()
-	end
+\tName = "Restart",
+\tCallback = Functions.Restart
 })
 
 FunctionsSection:AddButton({
-	Name = "Restart",
-	Callback = Functions.Restart
+\tName = "Exit",
+\tCallback = function()
+\t\tFunctions:Exit()
+\t\tLibrary.Unload()
+\tend
 })
 
 FunctionsSection:AddButton({
-	Name = "Exit",
-	Callback = function()
-		Functions:Exit()
-		Library.Unload()
-	end
+\tName = "Copy Script Page",
+\tCallback = function()
+\t\tsetclipboard("https://github.com/breonnmodzz-dotcom/Aimbot-V2")
+\tend
 })
 
-FunctionsSection:AddButton({
-	Name = "Copy Script Page",
-	Callback = function()
-		setclipboard("https://github.com/Exunys/Aimbot-V2")
-	end
-})
-	
+print("✅ BREONN Aimbot V2 + ESP + Botão Minimizar CARREGADO!")
+print("🔗 Novo RAW: https://raw.githubusercontent.com/breonnmodzz-dotcom/Aimbot-V2/refs/heads/main/Resources/Scripts/Main.lua")
